@@ -10,6 +10,10 @@ public class Document {
 
         System.out.println(path);
 
+        FileReader fileReader = null;
+        FileWriter fileWriterInvalid = null;
+        FileWriter fileWriterValid = null;
+
         try {
 
 
@@ -17,30 +21,53 @@ public class Document {
             File validNumber = new File("ValidNumber.txt");
             File invalidNumber = new File("InvalidNumber.txt");
 
-            FileReader fileReader = new FileReader("C:\\Users\\spm.u4\\IdeaProjects\\Docnum.txt");
+            fileReader = new FileReader(path);
             Scanner scan1 = new Scanner(fileReader);
 
-            FileWriter fileWriterInvalid = new FileWriter(invalidNumber, true);
-            FileWriter fileWriterValid = new FileWriter(validNumber, true);
+            fileWriterInvalid = new FileWriter(invalidNumber, true);
+            fileWriterValid = new FileWriter(validNumber, true);
 
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             while (bufferedReader.ready()) {
-                if (bufferedReader.readLine().length() == 15) {
-                    fileWriterValid.write(bufferedReader.readLine() + "\n");
+                String str = bufferedReader.readLine();
+                System.out.println(str);
+                if (str.length() == 15) {
+                    fileWriterValid.write(str + "\n");
                 } else {
-                    if (bufferedReader.readLine().length() < 15 || bufferedReader.readLine().length() > 15) {
-                        fileWriterInvalid.write(bufferedReader.readLine() + " не соотвествует длина" + "\n");
+                    if (str.length() < 15 || str.length() > 15) {
+                        fileWriterInvalid.write(str + " не соотвествует длина" + "\n");
                     }
                 }
-
-                fileReader.close();
-                fileWriterValid.close();
-                fileWriterInvalid.close();
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.getMessage());
+        } finally {
+            if (fileReader != null) {
+                try {
+                    fileReader.close();
+                } catch (IOException ioException) {
+                }
+            }
+            if (fileWriterInvalid != null) {
+                try {
+                    fileWriterInvalid.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+            }
+
+            if (fileWriterValid != null) {
+                try {
+                    fileWriterValid.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
         }
     }
 }
+
+
 
